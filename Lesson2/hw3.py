@@ -1,8 +1,5 @@
 # Simple programm for mathematical operations
 
-from os import truncate
-
-
 print('Можете вводить числа и операторы "+", "-", "*" и "/" последоватльно. Для получения результата введите "=". Начинайте с числа. ')
 
 result = 0
