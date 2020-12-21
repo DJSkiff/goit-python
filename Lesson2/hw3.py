@@ -16,7 +16,7 @@ secondOperandBool = True
 
 while firstOperandBool:
     try:
-        result = int(input("Введите число: "))
+        result = float(input("Введите число: "))
 
         firstOperandBool = False
 
@@ -39,7 +39,7 @@ while operatorBool:
 
             try:
 
-                secondOperand = int(input("Введите число: "))
+                secondOperand = float(input("Введите число: "))
 
                 secondOperandBool = False
 
