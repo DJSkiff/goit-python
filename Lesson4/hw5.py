@@ -31,7 +31,7 @@ def printFile(filesDict):
                 print(f'        {v}')
 
 
-def fileDistribute(fileCollections, path):
+def fileDistribute(fileCollections, path, nestingDeep):
 
     fileExtensions = []
 
