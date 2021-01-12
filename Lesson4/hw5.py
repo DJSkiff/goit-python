@@ -95,7 +95,7 @@ def fileDistribute(fileCollections, path, nestingDeep):
 
     allFiles['Другие файлы'] = others
 
-    allFiles['Все расширения'] = fileExtensions
+    allFiles['Все расширения'] = set(fileExtensions)
 
     printFile(allFiles)
 
