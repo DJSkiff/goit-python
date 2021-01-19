@@ -2,6 +2,15 @@
 
 def normalize(string):
 
+    """
+    normalize - is a function that converts Cyrillic characters to Latin characters
+
+    param : the string you need normalize
+
+    return : normalize string
+
+    """
+
     # dict with transliteral letters
 
     trans_dict = {ord('а'): 'a', ord('б'): 'b', ord('в'): 'v', ord('г'): 'g', ord('д'): 'd', ord('е'): 'e', ord('є'): 'ye', ord('ж'): 'zh', ord('з'): 'z', ord('и'): 'y', 
@@ -49,3 +58,4 @@ def normalize(string):
         
 
     return normalized.join(stringUp)
+
