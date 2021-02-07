@@ -15,15 +15,25 @@ arhiveFilters = ['zip', '7zip', 'gz', 'tar']
 
 
 def printFile(filesDict):
+
     for key, value in filesDict.items():
+
         if type(value) is str:
+
             print(f'{key} :')
+
             print(f'    {value}')
+
         else:
+
             if not value:
+
                 continue  # if not value in collections skip it
+
             print(f'    {key}:')
+
             for v in value:
+
                 print(f'        {v}')
 
 
@@ -103,11 +113,17 @@ def fileDistribute(fileCollections, path, nestingDeep):
 
 
 def grabPath(path, nestingDeep=0):
+
     fileCollections = []
+
     for file in os.listdir(path):
+
         if os.path.isdir(os.path.join(path, file)):
+
             grabPath(os.path.join(path, file), nestingDeep + 1)
+
         else:
+
             fileCollections.append(file)
 
     fileDistribute(fileCollections, path, nestingDeep)
