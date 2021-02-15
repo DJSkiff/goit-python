@@ -1,3 +1,4 @@
+import sys
 import os
 import shutil
 
@@ -143,10 +144,18 @@ def grabPath(path, nestingDeep=0):
 
 def main():
 
-    global GLOBAL_PATH
-    GLOBAL_PATH = r'C:/Users/vdunk/Desktop/Trash/'
     # 'C:\Users\vdunk\Desktop\Trash' sys.argv[1]
     grabPath(r'C:/Users/vdunk/Desktop/Trash/')
+
+
+def clean():
+    global GLOBAL_PATH
+    if len(sys.argv) == 1:
+        GLOBAL_PATH = os.getcwd()
+        grabPath(GLOBAL_PATH)
+    else:
+        GLOBAL_PATH = sys.argv[1]
+        grabPath(GLOBAL_PATH)
 
 
 if __name__ == '__main__':
