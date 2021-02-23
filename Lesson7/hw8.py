@@ -9,11 +9,11 @@ from collections import defaultdict
 
 
 def check_b_day(b_day):
-    current_day = datetime(2021, 2, 19)  # datetime.now().date()
+    current_day = datetime.now().date()
     next_monday = current_day + timedelta(7) - timedelta(current_day.weekday())
     start_period = next_monday - timedelta(2)
     end_period = next_monday + timedelta(5)
-    if start_period <= b_day <= end_period:
+    if start_period <= b_day.date() <= end_period:
         return True
     return False
 
@@ -61,3 +61,14 @@ def congratulate(users):
             b_list.append(f'{curent_b_day.date()}:{i["name"]}')
 
     print_result(group_list(b_list))
+
+
+if __name__ == '__main__':
+
+    users = ({'name': 'Jane', 'birthday': '01.03.2000'},
+             {'name': 'Mickael', 'birthday': '02.03.2000'},
+             {'name': 'Susanna', 'birthday': '03.03.2000'},
+             {'name': 'Jackson', 'birthday': '28.02.2000'},
+             {'name': 'Billy', 'birthday': '27.02.2000'},)
+
+congratulate(users)
