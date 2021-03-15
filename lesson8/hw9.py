@@ -1,4 +1,4 @@
-# dict for seving phonebook
+# dict for saving phonebook
 main_dict = {}
 
 # tuple with commands words
