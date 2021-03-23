@@ -4,16 +4,17 @@ import re
 
 
 class Field:
-    def __init__(self):
+    def __init__(self, value):
         self.__value = None
+        self.value = value
 
     @property
     def value(self):
         return self.__value
 
     @value.setter
-    def value(self, new_value):
-        self.__value = new_value
+    def value(self, value):
+        self.__value = value
 
 
 class Name(Field):
@@ -27,7 +28,7 @@ class Phone(Field):
     @Field.value.setter
     def value(self, new_value):
         if not re.match('^\d{10}', new_value):
-            raise ValueError
+            raise ValueError('Phone number must have 10 digits')
         else:
             super(Phone, Phone).value.__set__(self, new_value)
 
@@ -38,10 +39,10 @@ class Birthday(Field):
     @Field.value.setter
     def value(self, new_value):
         if not re.match('\d{2}-\d{2}', new_value):
-            raise ValueError
+            raise ValueError('Birthday must be "mm-dd" format')
         b_month, b_day = new_value.split('-')
         if int(b_month) > 12 and int(b_day) > 31:
-            raise ValueError
+            raise ValueError('Month must be in "01-12" day must be in "01-31"')
         else:
             super(Birthday, Birthday).value.__set__(self, new_value)
 
@@ -115,33 +116,27 @@ class AddressBook(UserDict):
             self.__record += 1
 
 
-# ad = AddressBook()
+ad = AddressBook()
 
-# ph = Phone()
+ph = Phone('0987654321')
 
-# ph.value = '0987654321'
+bd = Birthday('12-15')
 
-# bd = Birthday()
+rec = Record(Name("Bob"), ph, bd)
 
-# bd.value = '12-15'
+print(rec.days_to_birthday())
 
-# rec = Record(Name("Bob"), ph, bd)
+ad.add_record(rec)
 
-# print(rec.days_to_birthday())
+print(ad)
 
-# ad.add_record(rec)
+ph2 = Phone('0987654322')
 
-# print(ad)
+rec1 = Record(Name('Marley'), ph2)
 
-# ph2 = Phone()
+ad.add_record(rec1)
 
-# ph2.value = '0987654322'
+print(ad)
 
-# rec1 = Record(Name('Marley'), ph2)
-
-# ad.add_record(rec1)
-
-# print(ad)
-
-# for rec in ad:
-#     print(rec)
+for rec in ad:
+    print(rec)
