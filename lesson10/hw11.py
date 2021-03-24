@@ -25,18 +25,26 @@ class Name(Field):
 class Phone(Field):
     # def __init__(self, phone):
     #     self.phone = phone
-    @Field.value.setter
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
     def value(self, new_value):
         if not re.match('^\d{10}', new_value):
             raise ValueError('Phone number must have 10 digits')
         else:
-            super(Phone, Phone).value.__set__(self, new_value)
+            self.__value = new_value
 
 
 class Birthday(Field):
     # def __init__(self, birthday=''):
     #     self.birthday = birthday
-    @Field.value.setter
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
     def value(self, new_value):
         if not re.match('\d{2}-\d{2}', new_value):
             raise ValueError('Birthday must be "mm-dd" format')
@@ -44,7 +52,7 @@ class Birthday(Field):
         if int(b_month) > 12 and int(b_day) > 31:
             raise ValueError('Month must be in "01-12" day must be in "01-31"')
         else:
-            super(Birthday, Birthday).value.__set__(self, new_value)
+            self.__value = new_value
 
 
 class Record:
@@ -70,11 +78,11 @@ class Record:
 
     def edit_phone(self, index, obj):
         if isinstance(obj, Phone):
-            self._phones[index] = obj.value
+            self.records['phones'][index] = obj.value
 
     def delete_phone(self, obj):
         if isinstance(obj, Phone):
-            self._phones.remove(obj.value)
+            self.records['phones'].remove(obj.value)
 
     def __count_days(self, d_now, d_birth):
         if d_now > d_birth:
