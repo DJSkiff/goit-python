@@ -1,5 +1,7 @@
 from collections import UserDict
 from datetime import date, datetime
+from os import error
+import pickle
 import re
 
 
@@ -64,6 +66,7 @@ class Record:
         self.records['birthday'] = ''
 
         for arg in args:
+
             if isinstance(arg, Name):
                 self.records['name'] = arg.name
             elif isinstance(arg, Phone):
@@ -74,7 +77,7 @@ class Record:
     def add_phone(self, obj):
         if isinstance(obj, Phone):
             self.records['phones'].append(obj.value)
-            #self.record[self.name] = self.phones
+            # self.record[self.name] = self.phones
 
     def edit_phone(self, index, obj):
         if isinstance(obj, Phone):
@@ -91,9 +94,11 @@ class Record:
 
     def days_to_birthday(self):
         __birthday = self.records['birthday']
+
         if __birthday != '':
             result = self.__count_days(datetime.now().date(), date(year=datetime.now().year, month=int(
                 __birthday.split('-')[0]), day=int(__birthday.split('-')[1])))
+
             return f'There are {result.days} days left until the birthday'
         else:
             return f'Sorry, the contact has no date of birth'
@@ -101,54 +106,90 @@ class Record:
 
 class AddressBook(UserDict):
 
+    __record_count = 0
+
     def __init__(self):
         super(AddressBook, self).__init__()
-        self.__record = 0
-        self.__record_count = 0
 
     def __iter__(self):
         return self
 
     def __next__(self):
-
-        if self.__record_count < self.__record:
+        if self.__record_count < len(self.data):
             result = self.data[self.__record_count]
             self.__record_count += 1
             return result
         else:
             raise StopIteration
 
+    def __getstate__(self):
+        self._AddressBook__record_count = 0
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+
     def add_record(self, obj):
         if isinstance(obj, Record):
-            self.data[self.__record] = obj.records
-            self.__record += 1
+            self.data[len(self.data)] = obj.records
+
+    def find(self, param):
+
+        result = []
+
+        if len(param) < 3:
+            raise ValueError(f'Parameter must be 3 or more symbol')
+
+        if param.isalpha():
+            return list(filter(lambda value: param.lower() in value['name'].lower(), self.data.values()))
+
+        elif param.isdigit():
+
+            for value in self.data.values():
+                if list((x for x in value['phones'] if param in x)):
+                    result.append(value)
+
+            return result
+        else:
+
+            return result
+
+
+def save_addressBook(obj):
+    with open('address_book.bin', 'wb') as file:
+        pickle.dump(obj, file)
+
+
+def load_addressBook():
+    try:
+        file = open('address_book.bin', 'rb')
+    except FileNotFoundError:
+        return error
+    else:
+        with file:
+            return pickle.load(file)
 
 
 if __name__ == '__main__':
-    pass
 
+    ad = AddressBook()
 
-ad = AddressBook()
+    ph = Phone('0987654321')
 
-ph = Phone('0987654321')
+    bd = Birthday('12-15')
 
-bd = Birthday('12-15')
+    rec = Record(Name("Bob"), ph, bd)
 
-rec = Record(Name("Bob"), ph, bd)
+    ad.add_record(rec)
 
-print(rec.days_to_birthday())
+    ph2 = Phone('0987654322')
 
-ad.add_record(rec)
+    rec1 = Record(Name('Marley'), ph2)
 
-print(ad)
+    ad.add_record(rec1)
 
-ph2 = Phone('0987654322')
+    save_addressBook(ad)
 
-rec1 = Record(Name('Marley'), ph2)
+    new_ad = load_addressBook()
 
-ad.add_record(rec1)
-
-print(ad)
-
-for rec in ad:
-    print(rec)
+    print(new_ad.find('432'))
